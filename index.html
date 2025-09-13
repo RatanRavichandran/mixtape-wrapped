@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Mixtape + Love Wrapped</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header>
+    <h1>For You, From Me 🎀</h1>
+    <div class="auth">
+      <button id="login">Log in with Spotify</button>
+      <button id="logout" class="secondary">Log out</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="cassette" class="panel">
+      <h2>Cassette Mixtape</h2>
+      <div class="placeholder">Cassette UI will appear here.</div>
+    </section>
+
+    <section id="wrapped" class="panel">
+      <h2>Love Wrapped</h2>
+      <div class="placeholder">Log in with Spotify to see your cute stats 💞</div>
+    </section>
+  </main>
+
+  <footer>
+    <small>Made with HTML/CSS/JS & Spotify Web API.</small>
+  </footer>
+
+  <!-- Order matters: config first, then app -->
+  <script type="module" src="js/config.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
