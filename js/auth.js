@@ -1,22 +1,17 @@
-// js/auth.js
+// js/auth.js — Spotify PKCE auth (browser-only)
 import { SPOTIFY_CLIENT_ID, REDIRECT_URI, SCOPES } from "./config.js";
 
 const AUTH_ENDPOINT  = "https://accounts.spotify.com/authorize";
 const TOKEN_ENDPOINT = "https://accounts.spotify.com/api/token";
 
-// ---- Helpers ----
 const b64url = (bytes) =>
-  btoa(String.fromCharCode(...bytes))
-    .replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  btoa(String.fromCharCode(...bytes)).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
 
 const randomString = (len=64) => {
-  const arr = new Uint8Array(len);
-  crypto.getRandomValues(arr);
-  // base64url then strip non-alnum just to be safe & short
+  const arr = new Uint8Array(len); crypto.getRandomValues(arr);
   return b64url(arr).replace(/[^a-zA-Z0-9_-]/g,"").slice(0,len);
 };
 
-// ---- PKCE: create code_verifier & code_challenge ----
 export async function createPKCE() {
   const verifier  = randomString(64);
   const digest    = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(verifier));
@@ -25,7 +20,6 @@ export async function createPKCE() {
   return challenge;
 }
 
-// ---- Start login redirect ----
 export async function login() {
   const challenge = await createPKCE();
   const params = new URLSearchParams({
@@ -39,7 +33,6 @@ export async function login() {
   window.location = `${AUTH_ENDPOINT}?${params.toString()}`;
 }
 
-// ---- Handle redirect back from Spotify (exchange code for token) ----
 export async function handleRedirect() {
   const url = new URL(window.location.href);
   const code = url.searchParams.get("code");
@@ -64,12 +57,12 @@ export async function handleRedirect() {
   const data = await res.json();
 
   if (data.access_token) {
-    const expiresAt = Date.now() + (data.expires_in * 1000) - 60000; // refresh 1m early
+    const expiresAt = Date.now() + (data.expires_in * 1000) - 60000;
     localStorage.setItem("spotify_token", data.access_token);
     localStorage.setItem("spotify_exp", String(expiresAt));
     localStorage.removeItem("pkce_verifier");
 
-    // Clean ?code= from URL for a pretty page
+    // Clean params
     url.searchParams.delete("code");
     history.replaceState({}, "", url.toString());
     return data.access_token;
