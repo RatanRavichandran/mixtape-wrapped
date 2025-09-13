@@ -12,3 +12,28 @@ main { max-width:900px; margin:0 auto; padding:12px; display:grid; gap:16px; }
 .muted { color:var(--muted); }
 body:not(.authed) #logout { display:none; }
 body.authed #login { display:none; }
+/* Cassette reels */
+.reels {
+  display: flex;
+  justify-content: space-between;
+  margin: 12px 0;
+}
+.reel {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #1a1a23, #44445a);
+  position: relative;
+  animation: spin 6s linear infinite;
+}
+.reel::after {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  border-radius: 50%;
+  background: #0e0e11;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
