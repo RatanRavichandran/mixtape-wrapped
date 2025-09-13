@@ -9,15 +9,14 @@
 <body>
   <header>
     <h1>For You, From Me 🎀</h1>
-    <div class="auth">
-      <button id="login">Log in with Spotify</button>
-      <button id="export" class="secondary">Export My Stats (.json)</button>
-      <button id="import" class="secondary">Import Partner Stats</button>
-      <input id="import-file" type="file" accept="application/json" hidden />
-      <button id="clear" class="secondary">Clear Saved Data</button>
-      <button id="logout" class="secondary">Log out</button>
-    </div>
-  </header>
+  <div class="auth">
+    <button id="login">Log in with Spotify</button>
+    <button id="exportMe" class="secondary">Export My Stats (.json)</button>
+    <button id="importPartner" class="secondary">Import Partner Stats</button>
+    <input id="importFile" type="file" accept="application/json" hidden />
+    <button id="clearAll" class="secondary">Clear Saved Data</button>
+    <button id="logout" class="secondary">Log out</button>
+  </div>
 
   <main>
     <section id="cassette" class="panel"></section>
