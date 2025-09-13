@@ -29,17 +29,29 @@ function avgMood(features=[]) {
 }
 
 async function buildWrapped(token){
-  // Basic placeholder call to verify auth works (we’ll enhance in a later step)
-  const tracks = await api(`/me/top/tracks?limit=5&time_range=medium_term`, token);
+  // Fetch top tracks & artists
+  const [tracks, artists] = await Promise.all([
+    api(`/me/top/tracks?limit=10&time_range=medium_term`, token),
+    api(`/me/top/artists?limit=10&time_range=medium_term`, token)
+  ]);
+
+  // Audio features for top tracks
   const ids = (tracks.items||[]).map(t=>t.id).join(",");
-  const feats = ids ? await api(`/audio-features?ids=${ids}`, token) : { audio_features: [] };
+  const feats = ids
+    ? await api(`/audio-features?ids=${ids}`, token)
+    : { audio_features: [] };
+
   const mood = avgMood(feats.audio_features);
 
-  renderWrapped($("#wrapped"), {
-    topArtists: [],                 // fill later
-    topTracks:  tracks.items || [], // show some data to confirm
+  // Build the model
+  const model = {
+    topArtists: artists.items || [],
+    topTracks: tracks.items || [],
     mood
-  });
+  };
+
+  // Now actually render it
+  renderWrapped($("#wrapped"), model);
 
   document.body.classList.add("authed");
 }
