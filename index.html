@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Mixtape + Love Wrapped</title>
+  <title>Mixtape + Two-Person Love Wrapped</title>
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
@@ -11,19 +11,29 @@
     <h1>For You, From Me 🎀</h1>
     <div class="auth">
       <button id="login">Log in with Spotify</button>
+      <button id="export" class="secondary">Export My Stats (.json)</button>
+      <button id="import" class="secondary">Import Partner Stats</button>
+      <input id="import-file" type="file" accept="application/json" hidden />
+      <button id="clear" class="secondary">Clear Saved Data</button>
       <button id="logout" class="secondary">Log out</button>
     </div>
   </header>
 
   <main>
-    <section id="cassette" class="panel">
-      <h2>Cassette Mixtape</h2>
-      <div class="placeholder">Cassette UI will appear here.</div>
-    </section>
+    <section id="cassette" class="panel"></section>
 
     <section id="wrapped" class="panel">
-      <h2>Love Wrapped</h2>
-      <div class="placeholder">Log in with Spotify to see your cute stats 💞</div>
+      <div class="placeholder">
+        <h2>My Love Wrapped</h2>
+        <p>Log in with Spotify to generate your stats 💞</p>
+      </div>
+    </section>
+
+    <section id="us-wrapped" class="panel">
+      <div class="placeholder">
+        <h2>Us Wrapped</h2>
+        <p>Import your partner’s JSON to see a combined view 💗</p>
+      </div>
     </section>
   </main>
 
@@ -31,7 +41,7 @@
     <small>Made with HTML/CSS/JS & Spotify Web API.</small>
   </footer>
 
-  <!-- Order matters: config first, then app -->
+  <!-- Order: config first, then app (which imports auth/ui) -->
   <script type="module" src="js/config.js"></script>
   <script type="module" src="js/app.js"></script>
 </body>
