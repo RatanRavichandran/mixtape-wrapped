@@ -2,7 +2,7 @@
 import { PLAYLIST_SIDE_A, PLAYLIST_SIDE_B } from "./config.js";
 
 /* ---------- Cassette (Mixtape) ---------- */
-export function renderCassette(section, side="A") {
+export function renderCassette(section, side = "A") {
   const pid = side === "A" ? PLAYLIST_SIDE_A : PLAYLIST_SIDE_B;
   const other = side === "A" ? "B" : "A";
   section.innerHTML = `
@@ -21,7 +21,7 @@ export function renderCassette(section, side="A") {
             ? `<iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/${pid}?utm_source=generator"
                  width="100%" height="152" frameborder="0"
                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`
-            : `<div class="placeholder">Add your playlist IDs in <code>js/config.js</code> to show Side ${side} here.</div>`
+            : `<div class="placeholder">Add your playlist ID for Side ${side} in <code>js/config.js</code>.</div>`
         }
       </div>
     </div>
@@ -36,7 +36,7 @@ export function wireCassette(section, onFlip) {
 
 /* ---------- Love Wrapped ---------- */
 export function renderWrapped(container, model) {
-  // If no model passed (not logged in yet), show placeholder
+  // If no model (not logged in yet), show placeholder
   if (!model) {
     container.innerHTML = `
       <div class="wrapped">
@@ -48,7 +48,11 @@ export function renderWrapped(container, model) {
     return;
   }
 
-  const { topArtists = [], topTracks = [], mood = {valence:0, energy:0, danceability:0} } = model;
+  const {
+    topArtists = [],
+    topTracks = [],
+    mood = { valence: 0, energy: 0, danceability: 0 },
+  } = model;
 
   container.innerHTML = `
     <div class="wrapped">
@@ -62,8 +66,8 @@ export function renderWrapped(container, model) {
           <h3>Top Artists</h3>
           ${
             topArtists.length
-              ? `<ol>${topArtists.slice(0,5).map(a=>`<li>${escapeHtml(a.name)}</li>`).join("")}</ol>`
-              : `<p class="muted">No artists yet. Try changing time range later.</p>`
+              ? `<ol>${topArtists.slice(0, 5).map(a => `<li>${escapeHtml(a.name)}</li>`).join("")}</ol>`
+              : `<p class="muted">No artists yet.</p>`
           }
         </div>
 
@@ -71,7 +75,7 @@ export function renderWrapped(container, model) {
           <h3>Top Tracks</h3>
           ${
             topTracks.length
-              ? `<ol>${topTracks.slice(0,5).map(t=>{
+              ? `<ol>${topTracks.slice(0, 5).map(t => {
                   const artist = (t.artists && t.artists[0] && t.artists[0].name) ? t.artists[0].name : "Unknown";
                   return `<li>${escapeHtml(t.name)} — <span class="muted">${escapeHtml(artist)}</span></li>`;
                 }).join("")}</ol>`
@@ -92,7 +96,7 @@ export function renderWrapped(container, model) {
   `;
 }
 
-function meterRow(label, value=0) {
+function meterRow(label, value = 0) {
   const pct = Math.max(0, Math.min(100, Math.round((value || 0) * 100)));
   return `
     <div class="row">
@@ -103,11 +107,11 @@ function meterRow(label, value=0) {
   `;
 }
 
-function escapeHtml(s="") {
+function escapeHtml(s = "") {
   return String(s)
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#39;");
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
 }
