@@ -58,14 +58,14 @@ async function buildWrapped(token){
 
 async function main(){
   initCassette();
-  renderWrapped($("#wrapped"));
+  renderWrapped($("#wrapped")); // placeholder
 
   $("#login").addEventListener("click", login);
   $("#logout").addEventListener("click", logout);
 
-  // If redirected back from Spotify, exchange code → token
+  // Handle login
   const tokenFromRedirect = await handleRedirect();
   const token = tokenFromRedirect || getToken();
   if (token) await buildWrapped(token);
 }
-main();
+
