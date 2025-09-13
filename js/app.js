@@ -63,45 +63,60 @@ const loadPartner = ()    => JSON.parse(localStorage.getItem("partner_model") ||
 const clearAll = ()       => { ["me_model","partner_model","spotify_token","spotify_exp","pkce_verifier"].forEach(localStorage.removeItem.bind(localStorage)); };
 
 // ---------- export/import ----------
+// ---------- export/import ----------
 function downloadJSON(filename, obj) {
   const blob = new Blob([JSON.stringify(obj, null, 2)], {type: "application/json"});
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
-  a.href = url; a.download = filename; a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 2000);
+  a.href = url; a.download = filename; document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
 function wireExportImport() {
-  $("#export").addEventListener("click", () => {
+  const btnExport = $("#exportMe");
+  const btnImport = $("#importPartner");
+  const inputFile = $("#importFile");
+  const btnClear  = $("#clearAll");
+
+  if (!btnExport || !btnImport || !inputFile || !btnClear) {
+    console.warn("Export/Import controls not found in DOM.");
+    return;
+  }
+
+  btnExport.addEventListener("click", () => {
     const me = loadMe();
     if (!me) { alert("Log in first to generate your stats."); return; }
     const safeName = (me.displayName || "me").replace(/[^\w\-]+/g,"_");
     downloadJSON(`wrapped_${safeName}.json`, me);
   });
 
-  $("#import").addEventListener("click", () => $("#import-file").click());
-  $("#import-file").addEventListener("change", async (e) => {
+  btnImport.addEventListener("click", () => inputFile.click());
+
+  inputFile.addEventListener("change", async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
       const text = await file.text();
       const data = JSON.parse(text);
-      // naive validation
+      // quick validation
       if (!data || !data.displayName || !Array.isArray(data.topTracks) || !data.mood) {
         alert("This file doesn't look like a Wrapped JSON.");
         return;
       }
       savePartner(data);
-      renderAll(); // update combined view
+      renderAll();
       alert(`Imported partner: ${data.displayName}`);
-      e.target.value = ""; // reset
     } catch (err) {
       console.error(err);
       alert("Couldn't read that file. Make sure it's the exported JSON.");
+    } finally {
+      e.target.value = ""; // reset for next import
     }
   });
 
-  $("#clear").addEventListener("click", () => { clearAll(); location.reload(); });
+  btnClear.addEventListener("click", () => { clearAll(); location.reload(); });
 }
 
 // ---------- render everything ----------
