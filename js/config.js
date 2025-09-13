@@ -4,5 +4,5 @@ export const REDIRECT_URI = "https://ratanravichandran.github.io/mixtape-wrapped
 export const SCOPES = ["user-top-read"]; // can add more later
 
 // Temporary playlist IDs (we’ll replace with yours later)
-export const PLAYLIST_SIDE_A = ""; 
-export const PLAYLIST_SIDE_B = "";
+export const PLAYLIST_SIDE_A = "34xkznb2uQtfgA1yWZotav"; 
+export const PLAYLIST_SIDE_B = "3tT2d6JxgKcAt8AwkZYJbX";
